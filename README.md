@@ -1,4 +1,4 @@
-# GDE Profile Badge Generator
+# Newton School 101 DOC Badge Generator
 
 GoogleCloudReady Program Badge Generator based on GDE Badge Generator by Henry Lim(https://github.com/limhenry)
 
