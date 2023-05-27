@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Badge Generator</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="badge">
+      <div class="badge-header">
+        <h2>Badge Generator</h2>
+      </div>
+      <div class="badge-body">
+        <form>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+          <label for="role">Role:</label>
+          <input type="text" id="role" name="role" required>
+          <label for="color">Color:</label>
+          <input type="color" id="color" name="color" value="#ff0000" required>
+          <button type="submit">Generate</button>
+        </form>
+        <div id="badge-preview"></div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
