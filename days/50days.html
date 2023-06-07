@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Newton School 101 DOC Badge Generator</title>
+<meta name="description" content="Newton School 101 DOC Badge Generator">
+<meta property="og:image" content="https://gde-badge.limhenry.xyz/cover.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="shortcut icon" href="./cloudy.png"> -->
+<link rel="stylesheet" href="style.css">
+<link crossorigin="anonymous" href="https://fonts.googleapis.com/icon?family=Google+Sans:400&display=swap"
+  rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-57741199-15"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-57741199-15');
+</script>
+
+
+<header>
+  <div class="title">Newton School 101 DOC Badge Generator</div>
+</header>
+
+<div class="main-container">
+  <div class="input-panel">
+    <!-- <div class="input">
+      <label>Profile Picture</label>
+      <button class="button" onclick="uploadImage()">Upload Image</button>
+      <input class="profile-input" type="file" accept="image/*" onchange="upload(event)" hidden />
+    </div> -->
+    <div class="input">
+      <label for="category">Your Name</label>
+      <input id="category" list="gde-category" class="category-input" type="text" oninput="draw()" />
+     
+    </div>
+    <a href="./25days.html" class="btn btn-primary">25 Days</a>
+    <a href="./50days.html" class="btn btn-primary">50 Days</a>
+
+  </div>
+
+  <div class="preview-panel">
+    <canvas></canvas>
+    <div class="download-fab" onclick="download()">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="#fff">
+        <path d="M0 0h24v24H0V0z" fill="none" />
+        <path
+          d="M16.59 9H15V4c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v5H7.41c-.89 0-1.34 1.08-.71 1.71l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59c.63-.63.19-1.71-.7-1.71zM5 19c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H6c-.55 0-1 .45-1 1z" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+  const canvas = document.querySelector('canvas')
+  const ctx = canvas.getContext('2d')
+  let image = ''
+  let shape = 'original'
+
+  const uploadImage = () => {
+    document.querySelector('input.profile-input').click()
+  }
+
+  const changeShape = (type) => {
+    const original = document.querySelector('.select-container .select#original')
+    const square = document.querySelector('.select-container .select#square')
+    const circle = document.querySelector('.select-container .select#circle')
+    shape = type
+    switch (type) {
+      case 'original': {
+        original.setAttribute('selected', '')
+        square.removeAttribute('selected')
+        circle.removeAttribute('selected')
+        break
+      }
+      case 'square': {
+        square.setAttribute('selected', '')
+        original.removeAttribute('selected')
+        circle.removeAttribute('selected')
+        break
+      }
+      case 'circle': {
+        circle.setAttribute('selected', '')
+        original.removeAttribute('selected')
+        square.removeAttribute('selected')
+        break
+      }
+    }
+    draw()
+  }
+
+  const upload = (e) => {
+    if (e && e.target.files && e.target.files[0]) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const img = new Image()
+        img.onload = () => {
+          image = img
+          draw()
+        }
+        img.src = event.target.result
+      }
+      reader.readAsDataURL(e.target.files[0])
+    }
+  }
+
+  const banner = new Image()
+  banner.src = './50days.png'
+  banner.onload = () => {
+    draw()
+  }
+
+  const draw = () => {
+    const category = document.querySelector('input.category-input').value || 'Name'
+
+    if (image) {
+      switch (shape) {
+        case 'original': {
+          canvas.width = image.width
+          canvas.height = image.height
+          ctx.drawImage(image, 0, 0)
+          ctx.arc(canvas.width / 2, canvas.height / 2, canvas.height / 2, 0, Math.PI * 2)
+          break
+
+        }
+        default: {
+          const size = Math.min(image.width, image.height)
+          canvas.width = 500
+          canvas.height = 500
+          const hRatio = canvas.width / image.width
+          const vRatio = canvas.height / image.height
+          const ratio = Math.max(hRatio, vRatio)
+          const x = (canvas.width - image.width * ratio) / 2
+          const y = (canvas.height - image.height * ratio) / 2
+          ctx.drawImage(image, 10, 10, image.width, image.height, x, y, image.width * ratio, image.height * ratio)
+          break
+        }
+      }
+    }
+    else {
+      ctx.canvas.width = 500
+      ctx.canvas.height = 500
+      ctx.fillStyle = '#ffff'
+      // ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.fill()
+
+    }
+
+
+    const height = banner.height / banner.width * canvas.width
+    const y = canvas.height - height
+    const fontSize = canvas.width / 15
+    const fontY = y + height * 0.72
+    // ctx.drawImage(banner, 0, 0, banner.width, banner.height, 0, y, canvas.width, height)
+    ctx.drawImage(banner, 0, 0, banner.width, banner.height, 0, y, canvas.width, height)
+
+    ctx.fillStyle = '#fff'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.font = `bold ${fontSize}px Poppins, sans-serif`
+
+    ctx.fillText(category, canvas.width / 1.43, fontY)
+
+    if (shape === 'circle') {
+      ctx.globalCompositeOperation = 'destination-in'
+      ctx.beginPath()
+      ctx.arc(canvas.width / 2, canvas.height / 2, canvas.height / 2, 0, Math.PI * 2)
+      ctx.closePath()
+      ctx.fill()
+    }
+  }
+
+  const download = () => {
+    const a = document.createElement('a')
+    const url = canvas.toDataURL('image/png;base64')
+    a.download = 'badge.png'
+    a.href = url
+    a.click()
+  }
+</script>
+
+</html>
